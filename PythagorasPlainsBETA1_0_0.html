@@ -1,0 +1,1375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      -->
+<title>Pythagoras Plains Beta 1.0.0</title>
+<meta name="generator" content="MATLAB 24.1">
+<link rel="schema.DC" href="http://purl.org/dc/elements/1.1/">
+<meta name="DC.date" content="2024-11-20">
+<meta name="DC.source" content="PythagorasPlainsBETA1_0_0.m">
+<style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style>
+</head>
+<body>
+<div class="content">
+<h1>Pythagoras Plains Beta 1.0.0</h1>
+<pre class="codeinput">
+<span class="comment">% Menu</span>
+
+clc
+clear
+
+choice = menu(<span class="string">'Pythagoras Plains'</span>, <span class="string">'New Game'</span>, <span class="string">'Boss Farmer'</span>);
+
+
+
+
+<span class="comment">% Graphics</span>
+
+
+<span class="comment">%Load texture package (32 by 32)</span>
+Overworld = simpleGameEngine(<span class="string">'retro_pack.png'</span>,16,16,5, [193, 225, 193]);
+
+Health = 6;
+[x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Variables for the health bar are set. This function will be seen in conjuncuture with board creation (initially found below) as a way to reset the health bar after every battle.</span>
+
+
+<span class="comment">%While many variables are assigned values, they are not directly used in</span>
+<span class="comment">%graphic creation matrices. This because it was found to be a much simpler</span>
+<span class="comment">%process to just type numbers in rather than entire words. However,</span>
+<span class="comment">%classification was still necessary.</span>
+
+<span class="comment">%Graphic 1 (Main Camp)</span>
+Heart=728; Path=417; Door=292; House=609; Fire=335; tallGrass=65; tree=33; tree2=36; shortGrass=8; character=27; bossDoor=299;
+Camp = [36,65,65,299,8,8,36,36;
+    65,609,8,417,8,8,33,65;
+    36,417,8,417,417,417,65,65;
+    292,417,417,417,335,417,417,292;
+    65,8,36,417,417,417,8,8;
+    65,8,33,8,417,8,33,65;
+    36,7,8,8,292,8,36,65;
+    1,x1,x2,x3,x4,x5,x6,1;];
+
+<span class="comment">%Graphic 2 (Left)</span>
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy1=32; enemy2=64;
+BiomeL = [36,65,36,8,8,33,8,65;
+    8,64,417,8,33,8,36,8;
+    36,8,417,8,8,8,8,8;
+    8,8,417,417,417,417,417,292;
+    8,65,8,8,417,8,65,8;
+    8,33,65,8,417,8,65,8;
+    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+
+<span class="comment">%Graphic 3 (Right)</span>
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy3=32; enemy4=60;
+BiomeR=[8,65,36,33,65,8,8,36;
+    8,33,65,65,8,8,30,8;
+    8,8,65,8,65,8,417,8;
+    292,417,417,417,417,417,417,8;
+    8,65,417,8,36,8,36,8;
+    6,6,417,6,6,36,36,6;
+    36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+
+<span class="comment">%Graphic 4 (Down)</span>
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy1=32; enemy2=64;
+BiomeD = [65,36,8,33,292,36,33,36;
+    33,36,8,36,417,33,65,8;
+    36,33,33,8,417,33,8,65;
+    65,64,417,417,417,65,33,36;
+    36,33,8,33,417,65,36,65;
+    33,8,65,65,417,417,32,33;
+    8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+
+<span class="comment">%Graphic 5 (Dungeon)</span>
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree_2=36; shortGrass=8; enemy1=32; enemy2=64; tourches=485;bossDoor=299;
+Dungeon = [787,485,485,485,485,485,786,1;
+    786,485,417,223,417,485,787,1;
+    482,485,417,417,417,485,481,1;
+    786,485,417,417,417,485,482,1;
+    481,485,417,417,417,485,787,1;
+    787,485,417,417,417,485,482,1;
+    482,485,417,299,417,485,481,1;
+    1,x1,x2,x3,x4,x5,x6,1;];
+
+
+
+<span class="comment">%"New Game" sets all key values to 0, forcing the player to defeat all six</span>
+<span class="comment">%enemies to accumulate all necessary keys.</span>
+<span class="keyword">if</span> choice == 1
+k1 = 0;
+k2 = 0;
+k3 = 0;
+k4 = 0;
+k5 = 0;
+k6 = 0;
+<span class="keyword">end</span>
+
+<span class="comment">%"Boss Farmer" allows the player to jump straight to the final boss by</span>
+<span class="comment">%granting all keys at spawn.</span>
+<span class="keyword">if</span> choice == 2
+k1 = 1;
+k2 = 1;
+k3 = 1;
+k4 = 1;
+k5 = 1;
+k6 = 1;
+<span class="keyword">end</span>
+
+<span class="comment">%Health variables</span>
+Health = 6; <span class="comment">%Health starts at Full</span>
+RCount = 0; <span class="comment">%Number of times health has been regenerated, TWO REGENS MAX</span>
+
+<span class="comment">%Creation of variables used for controlled while looping. These values are</span>
+<span class="comment">%set to a specific value that will end a while loop when a player leaves a</span>
+<span class="comment">%biome, dies, or beats the final boss.</span>
+w = 1; <span class="comment">%MAIN GAME LOOP</span>
+x = 0; <span class="comment">%Various biomes</span>
+RWhile = 0; <span class="comment">%Camp/Regen</span>
+
+<span class="comment">%Creation of variables used for answer memory.</span>
+a1 = 0; <span class="comment">%answer 1</span>
+a2 = 0; <span class="comment">%answer 2</span>
+a3 = 0; <span class="comment">%etc...</span>
+a4 = 0;
+a5 = 0;
+a6 = 0;
+aB = 0; <span class="comment">%Boss fight answer</span>
+aC = 0; <span class="comment">%"Keys not acquired" message answer</span>
+aH = 0; <span class="comment">%"Already at full health" message answer</span>
+aR = 0; <span class="comment">%Regeneration MAX message answer</span>
+aGO = 0; <span class="comment">%Game Over message answer</span>
+
+<span class="comment">%The bottom four "answers" are only used as part of a simple way of displaying</span>
+<span class="comment">%messages, by turning them into pseudo questions (with only one "answer", which is usually to leave). The benefit here was that</span>
+<span class="comment">%it was simple, and allowed the player to close the message when they</span>
+<span class="comment">%desired. Since these messages should pop-up every time the player, say, attempts to</span>
+<span class="comment">%enter the dungeon without the required keys, the questions are included in</span>
+<span class="comment">%a small while loop that is broken when an "a" value equals 1. After the</span>
+<span class="comment">%termination of a loop, that "a" value is often reset back to 0, so that</span>
+<span class="comment">%the message loop can be activated again in the future.</span>
+
+
+
+
+<span class="comment">%MAIN GAME LOOP</span>
+<span class="keyword">while</span> w == 1
+
+<span class="comment">%Game Over Conditions / Health Check 1</span>
+<span class="keyword">if</span> Health &lt;= 0
+    <span class="keyword">break</span>
+<span class="keyword">end</span>
+
+
+kT = k1+k2+k3+k4+k5+k6; <span class="comment">%After leaving a biome, the script jumps back up to the Main Game Loop. Here, keys are counted.</span>
+x = 0; <span class="comment">%Biome loop is reset</span>
+RWhile = 0; <span class="comment">%Health regen loop is reset</span>
+
+
+<span class="comment">%Main Camp</span>
+<span class="keyword">if</span> choice == 1 || choice == 2
+    BackToCamp = 1;
+
+
+    <span class="comment">%BIOME LOOP (M)</span>
+
+    <span class="keyword">while</span> x ~= 1
+
+    <span class="comment">%The major (or M) biome loop is the "meat" of the game. Here, the program constantly</span>
+    <span class="comment">%monitors mouse input. Starting from the camp, when a biome is chosen, the</span>
+    <span class="comment">%program enters a minor biome loop (m) that contains options, such as</span>
+    <span class="comment">%enemy fights, that are available in that biome. These minor biome</span>
+    <span class="comment">%loops are only broken when a return tile is clicked, bringing</span>
+    <span class="comment">%the player back to camp. When that tile is chosen, it sets x = 1,</span>
+    <span class="comment">%breaking both the minor and major biome loops; this is designed so that the</span>
+    <span class="comment">%program jumps back up the Main Game Loop, where game over conditions</span>
+    <span class="comment">%and key count are checked. The variable "BackToCamp" is set to 1</span>
+    <span class="comment">%during this reset, prompting the program to load the camp graphic.</span>
+    <span class="comment">%This only works because each biome only has one outlet, that being back to camp, so making every major biome loop</span>
+    <span class="comment">%reset result in the camp being loaded works in this instance. However,</span>
+    <span class="comment">%if biome-to-biome jumping is included in later updates, this process</span>
+    <span class="comment">%will need rethought.</span>
+
+    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health Bar for Camp</span>
+    Camp = [36,65,65,299,8,8,36,36;
+        65,609,8,417,8,8,33,65;
+        36,417,8,417,417,417,65,65;
+        292,417,417,417,335,417,417,292;
+        65,8,36,417,417,417,8,8;
+        65,8,33,8,417,8,33,65;
+        36,7,8,8,292,8,36,65;
+        1,x1,x2,x3,x4,x5,x6,1;];
+
+    <span class="keyword">if</span> BackToCamp == 1
+    drawScene(Overworld, Camp);
+
+[r,c,p] = getMouseInput(Overworld);
+
+
+    <span class="keyword">if</span> (r==2)&amp;&amp;(c==2) <span class="comment">%Health Regeneration at Camp</span>
+
+        <span class="comment">%HEALTH REGEN LOOP</span>
+        RWhile = 0;
+        <span class="keyword">while</span> RWhile ~= 1
+            <span class="keyword">if</span> RCount &gt; 2
+                <span class="keyword">while</span> aR ~= 1
+                    msg = <span class="string">"You overworked the maester, and they've left the realm."</span>;
+                    opts = <span class="string">"Walk away"</span>;
+                    ansR = menu(msg,opts);
+                        <span class="keyword">if</span> ansR == 1
+                            aR = 1;
+                            RWhile = 1;
+                        <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                aR = 0;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> Health == 6
+                <span class="keyword">while</span> aH ~= 1
+                    msg = <span class="string">"You're already at full health."</span>;
+                    opts = <span class="string">"Walk away"</span>;
+                    ansH = menu(msg,opts);
+                        <span class="keyword">if</span> ansH == 1
+                            aH = 1;
+                            RWhile = 1;
+                        <span class="keyword">end</span>
+                <span class="keyword">end</span>
+                aH = 0;
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (RCount &lt;= 2) &amp;&amp; (Health ~= 6)
+                [Health, RCount] = HealthRegenFunc(kT, RCount, Health);
+                RWhile = 1;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">if</span> (r==3)&amp;&amp;(c==3)
+                BackToCamp = 1;
+    <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+
+    <span class="comment">%Biome 1 / Left (m)</span>
+    <span class="keyword">if</span> (r==4)&amp;&amp;(c==1)
+
+        <span class="keyword">while</span> x ~= 1
+
+            [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health Bar set for Biome 1</span>
+            BiomeL = [36,65,36,8,8,33,8,65;
+                8,64,417,8,33,8,36,8;
+                36,8,417,8,8,8,8,8;
+                8,8,417,417,417,417,417,292;
+                8,65,8,8,417,8,65,8;
+                8,33,65,8,417,8,65,8;
+                65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+            drawScene(Overworld,BiomeL);
+
+        <span class="keyword">if</span> Health == 0 <span class="comment">%Health Check 2</span>
+            <span class="keyword">break</span>
+        <span class="keyword">end</span>
+
+        [r,c,p] = getMouseInput(Overworld);
+            <span class="keyword">if</span> (r==2)&amp;&amp;(c==2) <span class="comment">%ENEMY 1</span>
+                <span class="keyword">while</span> a1 ~= 1
+                    msg = <span class="string">"Find the exact value of cos(90)"</span>;
+                    opts = [<span class="string">"1"</span> <span class="string">"0"</span> <span class="string">"No Solution"</span> <span class="string">"sqrt(2)/2"</span>];
+                    ans1 = menu(msg,opts);
+                        <span class="keyword">if</span> ans1 == 2 <span class="comment">%Correct Answer</span>
+                            a1 = 1;
+                            k1 = 1;
+                        <span class="keyword">end</span>
+                        <span class="keyword">if</span> ans1 ~= 2 <span class="comment">%Incorrect Answer</span>
+                            Health = Health - 1;
+                            <span class="keyword">if</span> Health &lt;= 0
+                                <span class="keyword">while</span> aGO ~= 1
+                                    msg = <span class="string">"Game Over"</span>;
+                                    opts = <span class="string">"Exit"</span>;
+                                    ansGO = menu(msg,opts);
+                                        <span class="keyword">if</span> ansGO == 1
+                                            aGO = 1;
+                                        <span class="keyword">end</span>
+                                 <span class="keyword">end</span>
+                                 <span class="keyword">break</span>
+                            <span class="keyword">end</span>
+                        <span class="keyword">end</span>
+                <span class="keyword">end</span>
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                BiomeL = [36,65,36,8,8,33,8,65;
+                    8,64,417,8,33,8,36,8;
+                    36,8,417,8,8,8,8,8;
+                    8,8,417,417,417,417,417,292;
+                    8,65,8,8,417,8,65,8;
+                    8,33,65,8,417,8,65,8;
+                    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeL);
+
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (r==7)&amp;&amp;(c==5) <span class="comment">%ENEMY 2</span>
+                <span class="keyword">while</span> a2 ~= 1
+                    msg = <span class="string">"Find the exact value of sin(945)"</span>;
+                    opts = [<span class="string">"-sqrt(3)/2"</span> <span class="string">"sqrt(2)"</span> <span class="string">"-sqrt(2)/2"</span> <span class="string">"1"</span>];
+                    ans2 = menu(msg,opts);
+                        <span class="keyword">if</span> ans2 == 3 <span class="comment">%Correct Answer</span>
+                            a2 = 1;
+                            k2 = 1;
+                        <span class="keyword">end</span>
+                        <span class="keyword">if</span> ans2 ~= 3 <span class="comment">%Incorrect Answer</span>
+                            Health = Health - 1;
+                            <span class="keyword">if</span> Health &lt;= 0
+                                <span class="keyword">while</span> aGO ~= 1
+                                     msg = <span class="string">"Game Over"</span>;
+                                     opts = <span class="string">"Exit"</span>;
+                                     ansGO = menu(msg,opts);
+                                         <span class="keyword">if</span> ansGO == 1
+                                             aGO = 1;
+                                         <span class="keyword">end</span>
+                                <span class="keyword">end</span>
+                                <span class="keyword">break</span>
+                            <span class="keyword">end</span>
+                        <span class="keyword">end</span>
+                <span class="keyword">end</span>
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                BiomeL = [36,65,36,8,8,33,8,65;
+                    8,64,417,8,33,8,36,8;
+                    36,8,417,8,8,8,8,8;
+                    8,8,417,417,417,417,417,292;
+                    8,65,8,8,417,8,65,8;
+                    8,33,65,8,417,8,65,8;
+                    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeL);
+
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> (r==4)&amp;&amp;(c==8)
+                x = 1;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+
+    <span class="comment">%Biome 2 / Right (m)</span>
+    <span class="keyword">if</span> (r==4)&amp;&amp;(c==8)
+
+            <span class="keyword">while</span> x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health Bar set for Biome 2</span>
+                BiomeR=[8,65,36,33,65,8,8,36;
+                    8,33,65,65,8,8,30,8;
+                    8,8,65,8,65,8,417,8;
+                    292,417,417,417,417,417,417,8;
+                    8,65,417,8,36,8,36,8;
+                    6,6,417,6,6,36,36,6;
+                    36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeR);
+
+                <span class="keyword">if</span> Health == 0 <span class="comment">%Health Check 3</span>
+                    <span class="keyword">break</span>
+                <span class="keyword">end</span>
+
+            [r,c,p] = getMouseInput(Overworld);
+                <span class="keyword">if</span> (r==2)&amp;&amp;(c==7) <span class="comment">%ENEMY 3</span>
+                    <span class="keyword">while</span> a3 ~= 1
+                        msg = <span class="string">"Find the exact value of sin(-585)"</span>;
+                        opts = [<span class="string">"1/3"</span> <span class="string">"sqrt(2)/2"</span> <span class="string">"1"</span> <span class="string">"0"</span>];
+                        ans3 = menu(msg,opts);
+                            <span class="keyword">if</span> ans3 == 2 <span class="comment">%Correct Answer</span>
+                                a3 = 1;
+                                k3 = 1;
+                            <span class="keyword">end</span>
+                            <span class="keyword">if</span> ans3 ~= 2 <span class="comment">%Incorrect Answer</span>
+                                Health = Health - 1;
+                                <span class="keyword">if</span> Health &lt;= 0
+                                    <span class="keyword">while</span> aGO ~= 1
+                                        msg = <span class="string">"Game Over"</span>;
+                                        opts = <span class="string">"Exit"</span>;
+                                        ansGO = menu(msg,opts);
+                                            <span class="keyword">if</span> ansGO == 1
+                                                aGO = 1;
+                                            <span class="keyword">end</span>
+                                    <span class="keyword">end</span>
+                                    <span class="keyword">break</span>
+                                <span class="keyword">end</span>
+                            <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                    BiomeR=[8,65,36,33,65,8,8,36;
+                        8,33,65,65,8,8,30,8;
+                        8,8,65,8,65,8,417,8;
+                        292,417,417,417,417,417,417,8;
+                        8,65,417,8,36,8,36,8;
+                        6,6,417,6,6,36,36,6;
+                        36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeR);
+
+                <span class="keyword">end</span>
+
+                <span class="keyword">if</span> (r==7)&amp;&amp;(c==3) <span class="comment">%ENEMY 4</span>
+                    <span class="keyword">while</span> a4 ~= 1
+                        msg = <span class="string">"From the top of a cliff 30 meters tall, the angle of depression to a house on the ground is 34&deg;. How far is the house from the base of the cliff?"</span>;
+                        opts = [<span class="string">"36.19 meters"</span> <span class="string">"45.34 meters"</span> <span class="string">"58.89 meters"</span> <span class="string">"44.48 meters"</span>];
+                        ans4 = menu(msg,opts);
+                            <span class="keyword">if</span> ans4 == 4 <span class="comment">%Correct Answer</span>
+                                a4 = 1;
+                                k4 = 1;
+                            <span class="keyword">end</span>
+                            <span class="keyword">if</span> ans4 ~= 4 <span class="comment">%Incorrect Answer</span>
+                                Health = Health - 1;
+                                <span class="keyword">if</span> Health &lt;= 0
+                                    <span class="keyword">while</span> aGO ~= 1
+                                        msg = <span class="string">"Game Over"</span>;
+                                        opts = <span class="string">"Exit"</span>;
+                                        ansGO = menu(msg,opts);
+                                            <span class="keyword">if</span> ansGO == 1
+                                                aGO = 1;
+                                            <span class="keyword">end</span>
+                                    <span class="keyword">end</span>
+                                    <span class="keyword">break</span>
+                                <span class="keyword">end</span>
+                            <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                    BiomeR=[8,65,36,33,65,8,8,36;
+                        8,33,65,65,8,8,30,8;
+                        8,8,65,8,65,8,417,8;
+                        292,417,417,417,417,417,417,8;
+                        8,65,417,8,36,8,36,8;
+                        6,6,417,6,6,36,36,6;
+                        36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeR);
+
+                <span class="keyword">end</span>
+            <span class="keyword">if</span> (r==4)&amp;&amp;(c==1)
+                x = 1;
+            <span class="keyword">end</span>
+            <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+
+    <span class="comment">%Biome 3 / Down (m)</span>
+    <span class="keyword">if</span> (r==7)&amp;&amp;(c==5)
+
+            <span class="keyword">while</span> x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health Bar set for Biome 3</span>
+                BiomeD = [65,36,8,33,292,36,33,36;
+                    33,36,8,36,417,33,65,8;
+                    36,33,33,8,417,33,8,65;
+                    65,64,417,417,417,65,33,36;
+                    36,33,8,33,417,65,36,65;
+                    33,8,65,65,417,417,32,33;
+                    8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeD);
+
+                <span class="keyword">if</span> Health == 0 <span class="comment">%Health Check 3</span>
+                    <span class="keyword">break</span>
+                <span class="keyword">end</span>
+
+            [r,c,p] = getMouseInput(Overworld);
+                <span class="keyword">if</span> (r==4)&amp;&amp;(c==2) <span class="comment">%ENEMY 5</span>
+                    <span class="keyword">while</span> a5 ~= 1
+                        msg = <span class="string">"Find the exact value of tan(180)"</span>;
+                        opts = [<span class="string">"sqrt(2)/2"</span> <span class="string">"0"</span> <span class="string">"1"</span> <span class="string">"-sqrt(2)/2"</span>];
+                        ans5 = menu(msg,opts);
+                            <span class="keyword">if</span> ans5 == 2 <span class="comment">%Correct Answer</span>
+                                a5 = 1;
+                                k5 = 1;
+                            <span class="keyword">end</span>
+                            <span class="keyword">if</span> ans5 ~= 2 <span class="comment">%Incorrect Answer</span>
+                                Health = Health - 1;
+                                <span class="keyword">if</span> Health &lt;= 0
+                                    <span class="keyword">while</span> aGO ~= 1
+                                        msg = <span class="string">"Game Over"</span>;
+                                        opts = <span class="string">"Exit"</span>;
+                                        ansGO = menu(msg,opts);
+                                            <span class="keyword">if</span> ansGO == 1
+                                                aGO = 1;
+                                            <span class="keyword">end</span>
+                                    <span class="keyword">end</span>
+                                    <span class="keyword">break</span>
+                                <span class="keyword">end</span>
+                            <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                    BiomeD = [65,36,8,33,292,36,33,36;
+                        33,36,8,36,417,33,65,8;
+                        36,33,33,8,417,33,8,65;
+                        65,64,417,417,417,65,33,36;
+                        36,33,8,33,417,65,36,65;
+                        33,8,65,65,417,417,32,33;
+                        8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeD);
+
+                <span class="keyword">end</span>
+
+                <span class="keyword">if</span> (r==6)&amp;&amp;(c==7) <span class="comment">%ENEMY 6</span>
+                    <span class="keyword">while</span> a6 ~= 1
+                        msg = <span class="string">"A right triangle has sides with lengths 5, 12, and 13. Find the angle (in degrees) opposite of the side of length 12. "</span>;
+                        opts = [<span class="string">"67.4"</span> <span class="string">"24.6"</span> <span class="string">"90"</span> <span class="string">"22.6"</span>];
+                        ans6 = menu(msg,opts);
+                            <span class="keyword">if</span> ans6 == 1 <span class="comment">%Correct Answer</span>
+                                a6 = 1;
+                                k6 = 1;
+                            <span class="keyword">end</span>
+                            <span class="keyword">if</span> ans6 ~= 1 <span class="comment">%Incorrect Answer</span>
+                                Health = Health - 1;
+                                <span class="keyword">if</span> Health &lt;= 0
+                                    <span class="keyword">while</span> aGO ~= 1
+                                        msg = <span class="string">"Game Over"</span>;
+                                        opts = <span class="string">"Exit"</span>;
+                                        ansGO = menu(msg,opts);
+                                            <span class="keyword">if</span> ansGO == 1
+                                                aGO = 1;
+                                            <span class="keyword">end</span>
+                                    <span class="keyword">end</span>
+                                    <span class="keyword">break</span>
+                                <span class="keyword">end</span>
+                            <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                    BiomeD = [65,36,8,33,292,36,33,36;
+                        33,36,8,36,417,33,65,8;
+                        36,33,33,8,417,33,8,65;
+                        65,64,417,417,417,65,33,36;
+                        36,33,8,33,417,65,36,65;
+                        33,8,65,65,417,417,32,33;
+                        8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeD);
+
+                <span class="keyword">end</span>
+            <span class="keyword">if</span> (r==1)&amp;&amp;(c==5)
+                x = 1;
+            <span class="keyword">end</span>
+            <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+    <span class="comment">%Dungeon / Up (m)</span>
+    <span class="keyword">if</span> (r==1)&amp;&amp;(c==4)
+
+        <span class="comment">%Keys not acquired.</span>
+        <span class="keyword">if</span> (kT~=6)
+            aC = 0;
+            <span class="keyword">while</span> aC ~= 1
+                msg = <span class="string">"You are not ready..."</span>;
+                opts = <span class="string">"Walk away"</span>;
+                ansC = menu(msg,opts);
+                    <span class="keyword">if</span> ansC == 1
+                        aC = 1;
+                        k2 = 1;
+                    <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">%Keys acquired, boss fight unlocked.</span>
+        <span class="keyword">if</span> (kT==6)
+
+            <span class="keyword">while</span> x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health Bar set for Dungeon</span>
+                Dungeon = [787,485,485,485,485,485,786,1;
+                    786,485,417,223,417,485,787,1;
+                    482,485,417,417,417,485,481,1;
+                    786,485,417,417,417,485,482,1;
+                    481,485,417,417,417,485,787,1;
+                    787,485,417,417,417,485,482,1;
+                    482,485,417,299,417,485,481,1;
+                    1,x1,x2,x3,x4,x5,x6,1;];
+                drawScene(Overworld,Dungeon);
+
+                <span class="keyword">if</span> Health == 0 <span class="comment">%Health Check 5</span>
+                    <span class="keyword">break</span>
+                <span class="keyword">end</span>
+
+            [r,c,p] = getMouseInput(Overworld);
+                <span class="keyword">if</span> (r==2)&amp;&amp;(c==4) <span class="comment">%BOSS FIGHT</span>
+                    <span class="keyword">while</span> aB ~= 1
+                        msg = <span class="string">"Given that: a = 3 meters, b = 1 meter, and B' = 17 degrees, find the length of side c."</span>;
+                        opts = [<span class="string">"3.16 meters"</span> <span class="string">"3.35 meters"</span> <span class="string">"2.39 meters"</span> <span class="string">"No Solution"</span>];
+                        ansB = menu(msg,opts);
+                        <span class="keyword">if</span> ansB == 2 <span class="comment">%Correct Answer</span>
+                            aB = 1;
+                            k2 = 1;
+                        <span class="keyword">end</span>
+                        <span class="keyword">if</span> ansB ~= 2 <span class="comment">%Incorrect Answer</span>
+                            Health = Health - 2; <span class="comment">%Unlike the 6 base enemies, the boss takes 2 health per incorrect answer.</span>
+                                <span class="keyword">if</span> Health &lt;= 0
+                                    <span class="keyword">while</span> aGO ~= 1
+                                        msg = <span class="string">"Game Over"</span>;
+                                        opts = <span class="string">"Exit"</span>;
+                                        ansGO = menu(msg,opts);
+                                            <span class="keyword">if</span> ansGO == 1
+                                                aGO = 1;
+                                            <span class="keyword">end</span>
+                                    <span class="keyword">end</span>
+                                    <span class="keyword">break</span>
+                                <span class="keyword">end</span>
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); <span class="comment">%Health bar reset after fight</span>
+                    Dungeon = [787,485,485,485,485,485,786,1;
+                        786,485,417,223,417,485,787,1;
+                        482,485,417,417,417,485,481,1;
+                        786,485,417,417,417,485,482,1;
+                        481,485,417,417,417,485,787,1;
+                        787,485,417,417,417,485,482,1;
+                        482,485,417,299,417,485,481,1;
+                        1,x1,x2,x3,x4,x5,x6,1;];
+                    drawScene(Overworld,Dungeon);
+
+                aGO = 0;
+                <span class="keyword">while</span> aGO ~= 1
+                    msg = <span class="string">"Congratulations, your trigonometry skills have saved the realm!"</span>;
+                    opts = <span class="string">"Exit"</span>;
+                    ansGO = menu(msg,opts);
+                        <span class="keyword">if</span> ansGO == 1
+                            aGO = 1;
+                            w = 0;
+                            x = 1;
+                        <span class="keyword">end</span>
+                <span class="keyword">end</span>
+
+                <span class="comment">%Program is closed after victory message</span>
+                close <span class="string">all</span>
+                <span class="keyword">break</span>
+
+                <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (r==2)&amp;&amp;(c==4)
+                x = 1;
+            <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre>
+<pre class="codeoutput error">Unrecognized function or variable 'k1'.
+
+Error in PythagorasPlainsBETA1_0_0 (line 151)
+kT = k1+k2+k3+k4+k5+k6; %After leaving a biome, the script jumps back up to the Main Game Loop. Here, keys are counted.
+</pre>
+<p class="footer">
+<br>
+<a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2024a</a>
+<br>
+</p>
+</div>
+<!--
+##### SOURCE BEGIN #####
+%% Pythagoras Plains Beta 1.0.0
+
+
+
+% Menu
+
+clc
+clear
+
+choice = menu('Pythagoras Plains', 'New Game', 'Boss Farmer');
+
+
+
+
+% Graphics
+
+
+%Load texture package (32 by 32)
+Overworld = simpleGameEngine('retro_pack.png',16,16,5, [193, 225, 193]);
+
+Health = 6;
+[x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Variables for the health bar are set. This function will be seen in conjuncuture with board creation (initially found below) as a way to reset the health bar after every battle.
+
+
+%While many variables are assigned values, they are not directly used in
+%graphic creation matrices. This because it was found to be a much simpler
+%process to just type numbers in rather than entire words. However,
+%classification was still necessary.
+
+%Graphic 1 (Main Camp)
+Heart=728; Path=417; Door=292; House=609; Fire=335; tallGrass=65; tree=33; tree2=36; shortGrass=8; character=27; bossDoor=299;
+Camp = [36,65,65,299,8,8,36,36;
+    65,609,8,417,8,8,33,65;
+    36,417,8,417,417,417,65,65;
+    292,417,417,417,335,417,417,292;
+    65,8,36,417,417,417,8,8;
+    65,8,33,8,417,8,33,65;
+    36,7,8,8,292,8,36,65;
+    1,x1,x2,x3,x4,x5,x6,1;];
+
+%Graphic 2 (Left)
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy1=32; enemy2=64;
+BiomeL = [36,65,36,8,8,33,8,65;
+    8,64,417,8,33,8,36,8;
+    36,8,417,8,8,8,8,8;
+    8,8,417,417,417,417,417,292;
+    8,65,8,8,417,8,65,8;
+    8,33,65,8,417,8,65,8;
+    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+
+%Graphic 3 (Right)
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy3=32; enemy4=60;
+BiomeR=[8,65,36,33,65,8,8,36;
+    8,33,65,65,8,8,30,8;
+    8,8,65,8,65,8,417,8;
+    292,417,417,417,417,417,417,8;
+    8,65,417,8,36,8,36,8;
+    6,6,417,6,6,36,36,6;
+    36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+
+%Graphic 4 (Down)
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree2=36; shortGrass=8; enemy1=32; enemy2=64;
+BiomeD = [65,36,8,33,292,36,33,36;
+    33,36,8,36,417,33,65,8;
+    36,33,33,8,417,33,8,65;
+    65,64,417,417,417,65,33,36;
+    36,33,8,33,417,65,36,65;
+    33,8,65,65,417,417,32,33;
+    8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+
+%Graphic 5 (Dungeon)
+Heart=728; Path=417; Door=292; House=609; tallGrass=65; tree=33; tree_2=36; shortGrass=8; enemy1=32; enemy2=64; tourches=485;bossDoor=299;
+Dungeon = [787,485,485,485,485,485,786,1;
+    786,485,417,223,417,485,787,1;
+    482,485,417,417,417,485,481,1;
+    786,485,417,417,417,485,482,1;
+    481,485,417,417,417,485,787,1;
+    787,485,417,417,417,485,482,1;
+    482,485,417,299,417,485,481,1;
+    1,x1,x2,x3,x4,x5,x6,1;];
+
+
+
+%"New Game" sets all key values to 0, forcing the player to defeat all six
+%enemies to accumulate all necessary keys.
+if choice == 1
+k1 = 0;
+k2 = 0;
+k3 = 0;
+k4 = 0;
+k5 = 0;
+k6 = 0;
+end 
+
+%"Boss Farmer" allows the player to jump straight to the final boss by
+%granting all keys at spawn.
+if choice == 2
+k1 = 1;
+k2 = 1;
+k3 = 1;
+k4 = 1;
+k5 = 1;
+k6 = 1;
+end
+
+%Health variables
+Health = 6; %Health starts at Full
+RCount = 0; %Number of times health has been regenerated, TWO REGENS MAX
+
+%Creation of variables used for controlled while looping. These values are
+%set to a specific value that will end a while loop when a player leaves a
+%biome, dies, or beats the final boss.
+w = 1; %MAIN GAME LOOP
+x = 0; %Various biomes
+RWhile = 0; %Camp/Regen
+
+%Creation of variables used for answer memory.
+a1 = 0; %answer 1
+a2 = 0; %answer 2
+a3 = 0; %etc...
+a4 = 0;
+a5 = 0;
+a6 = 0;
+aB = 0; %Boss fight answer
+aC = 0; %"Keys not acquired" message answer
+aH = 0; %"Already at full health" message answer
+aR = 0; %Regeneration MAX message answer
+aGO = 0; %Game Over message answer
+
+%The bottom four "answers" are only used as part of a simple way of displaying
+%messages, by turning them into pseudo questions (with only one "answer", which is usually to leave). The benefit here was that
+%it was simple, and allowed the player to close the message when they
+%desired. Since these messages should pop-up every time the player, say, attempts to
+%enter the dungeon without the required keys, the questions are included in
+%a small while loop that is broken when an "a" value equals 1. After the
+%termination of a loop, that "a" value is often reset back to 0, so that
+%the message loop can be activated again in the future.
+
+
+
+
+%MAIN GAME LOOP
+while w == 1
+    
+%Game Over Conditions / Health Check 1
+if Health <= 0
+    break
+end
+
+
+kT = k1+k2+k3+k4+k5+k6; %After leaving a biome, the script jumps back up to the Main Game Loop. Here, keys are counted.
+x = 0; %Biome loop is reset
+RWhile = 0; %Health regen loop is reset
+
+
+%Main Camp
+if choice == 1 || choice == 2
+    BackToCamp = 1;
+    
+
+    %BIOME LOOP (M)
+
+    while x ~= 1
+
+    %The major (or M) biome loop is the "meat" of the game. Here, the program constantly
+    %monitors mouse input. Starting from the camp, when a biome is chosen, the
+    %program enters a minor biome loop (m) that contains options, such as
+    %enemy fights, that are available in that biome. These minor biome
+    %loops are only broken when a return tile is clicked, bringing
+    %the player back to camp. When that tile is chosen, it sets x = 1,
+    %breaking both the minor and major biome loops; this is designed so that the
+    %program jumps back up the Main Game Loop, where game over conditions
+    %and key count are checked. The variable "BackToCamp" is set to 1
+    %during this reset, prompting the program to load the camp graphic.
+    %This only works because each biome only has one outlet, that being back to camp, so making every major biome loop
+    %reset result in the camp being loaded works in this instance. However,
+    %if biome-to-biome jumping is included in later updates, this process
+    %will need rethought.
+
+    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health Bar for Camp
+    Camp = [36,65,65,299,8,8,36,36;
+        65,609,8,417,8,8,33,65;
+        36,417,8,417,417,417,65,65;
+        292,417,417,417,335,417,417,292;
+        65,8,36,417,417,417,8,8;
+        65,8,33,8,417,8,33,65;
+        36,7,8,8,292,8,36,65;
+        1,x1,x2,x3,x4,x5,x6,1;];
+
+    if BackToCamp == 1 
+    drawScene(Overworld, Camp);
+
+[r,c,p] = getMouseInput(Overworld);
+
+
+    if (r==2)&&(c==2) %Health Regeneration at Camp
+
+        %HEALTH REGEN LOOP
+        RWhile = 0;
+        while RWhile ~= 1
+            if RCount > 2
+                while aR ~= 1
+                    msg = "You overworked the maester, and they've left the realm.";
+                    opts = "Walk away";
+                    ansR = menu(msg,opts);
+                        if ansR == 1
+                            aR = 1;
+                            RWhile = 1;
+                        end
+                end
+                aR = 0;
+            end
+            if Health == 6
+                while aH ~= 1
+                    msg = "You're already at full health.";
+                    opts = "Walk away";
+                    ansH = menu(msg,opts);
+                        if ansH == 1
+                            aH = 1;
+                            RWhile = 1;
+                        end
+                end
+                aH = 0;
+            end
+            if (RCount <= 2) && (Health ~= 6)
+                [Health, RCount] = HealthRegenFunc(kT, RCount, Health);
+                RWhile = 1;
+            end
+        end
+    if (r==3)&&(c==3)
+                BackToCamp = 1;
+    end
+    end
+    end
+
+
+
+    %Biome 1 / Left (m)
+    if (r==4)&&(c==1)
+        
+        while x ~= 1
+
+            [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health Bar set for Biome 1
+            BiomeL = [36,65,36,8,8,33,8,65;
+                8,64,417,8,33,8,36,8;
+                36,8,417,8,8,8,8,8;
+                8,8,417,417,417,417,417,292;
+                8,65,8,8,417,8,65,8;
+                8,33,65,8,417,8,65,8;
+                65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+            drawScene(Overworld,BiomeL);
+
+        if Health == 0 %Health Check 2
+            break
+        end
+
+        [r,c,p] = getMouseInput(Overworld);
+            if (r==2)&&(c==2) %ENEMY 1
+                while a1 ~= 1
+                    msg = "Find the exact value of cos(90)";
+                    opts = ["1" "0" "No Solution" "sqrt(2)/2"];
+                    ans1 = menu(msg,opts);
+                        if ans1 == 2 %Correct Answer
+                            a1 = 1;
+                            k1 = 1;
+                        end
+                        if ans1 ~= 2 %Incorrect Answer
+                            Health = Health - 1;
+                            if Health <= 0
+                                while aGO ~= 1
+                                    msg = "Game Over";
+                                    opts = "Exit";
+                                    ansGO = menu(msg,opts);
+                                        if ansGO == 1
+                                            aGO = 1;
+                                        end
+                                 end
+                                 break
+                            end
+                        end
+                end
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                BiomeL = [36,65,36,8,8,33,8,65;
+                    8,64,417,8,33,8,36,8;
+                    36,8,417,8,8,8,8,8;
+                    8,8,417,417,417,417,417,292;
+                    8,65,8,8,417,8,65,8;
+                    8,33,65,8,417,8,65,8;
+                    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeL);
+                
+            end
+
+            if (r==7)&&(c==5) %ENEMY 2
+                while a2 ~= 1
+                    msg = "Find the exact value of sin(945)";
+                    opts = ["-sqrt(3)/2" "sqrt(2)" "-sqrt(2)/2" "1"];
+                    ans2 = menu(msg,opts);
+                        if ans2 == 3 %Correct Answer
+                            a2 = 1;
+                            k2 = 1;
+                        end
+                        if ans2 ~= 3 %Incorrect Answer
+                            Health = Health - 1;
+                            if Health <= 0
+                                while aGO ~= 1
+                                     msg = "Game Over";
+                                     opts = "Exit";
+                                     ansGO = menu(msg,opts);
+                                         if ansGO == 1
+                                             aGO = 1;
+                                         end
+                                end
+                                break
+                            end
+                        end
+                end
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                BiomeL = [36,65,36,8,8,33,8,65;
+                    8,64,417,8,33,8,36,8;
+                    36,8,417,8,8,8,8,8;
+                    8,8,417,417,417,417,417,292;
+                    8,65,8,8,417,8,65,8;
+                    8,33,65,8,417,8,65,8;
+                    65,8,65,8,32,65,8,33;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeL);
+                
+            end
+            if (r==4)&&(c==8)
+                x = 1;
+            end
+        end
+    end
+
+
+
+    %Biome 2 / Right (m)
+    if (r==4)&&(c==8)
+
+            while x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health Bar set for Biome 2
+                BiomeR=[8,65,36,33,65,8,8,36;
+                    8,33,65,65,8,8,30,8;
+                    8,8,65,8,65,8,417,8;
+                    292,417,417,417,417,417,417,8;
+                    8,65,417,8,36,8,36,8;
+                    6,6,417,6,6,36,36,6;
+                    36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeR);
+
+                if Health == 0 %Health Check 3
+                    break
+                end
+
+            [r,c,p] = getMouseInput(Overworld);
+                if (r==2)&&(c==7) %ENEMY 3
+                    while a3 ~= 1
+                        msg = "Find the exact value of sin(-585)";
+                        opts = ["1/3" "sqrt(2)/2" "1" "0"];
+                        ans3 = menu(msg,opts);
+                            if ans3 == 2 %Correct Answer
+                                a3 = 1;
+                                k3 = 1;
+                            end
+                            if ans3 ~= 2 %Incorrect Answer
+                                Health = Health - 1;
+                                if Health <= 0
+                                    while aGO ~= 1
+                                        msg = "Game Over";
+                                        opts = "Exit";
+                                        ansGO = menu(msg,opts);
+                                            if ansGO == 1
+                                                aGO = 1;
+                                            end
+                                    end
+                                    break
+                                end
+                            end
+                    end
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                    BiomeR=[8,65,36,33,65,8,8,36;
+                        8,33,65,65,8,8,30,8;
+                        8,8,65,8,65,8,417,8;
+                        292,417,417,417,417,417,417,8;
+                        8,65,417,8,36,8,36,8;
+                        6,6,417,6,6,36,36,6;
+                        36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeR);
+
+                end
+
+                if (r==7)&&(c==3) %ENEMY 4
+                    while a4 ~= 1
+                        msg = "From the top of a cliff 30 meters tall, the angle of depression to a house on the ground is 34°. How far is the house from the base of the cliff?";
+                        opts = ["36.19 meters" "45.34 meters" "58.89 meters" "44.48 meters"];
+                        ans4 = menu(msg,opts);
+                            if ans4 == 4 %Correct Answer
+                                a4 = 1;
+                                k4 = 1;
+                            end
+                            if ans4 ~= 4 %Incorrect Answer
+                                Health = Health - 1;
+                                if Health <= 0
+                                    while aGO ~= 1
+                                        msg = "Game Over";
+                                        opts = "Exit";
+                                        ansGO = menu(msg,opts);
+                                            if ansGO == 1
+                                                aGO = 1;
+                                            end
+                                    end
+                                    break
+                                end
+                            end
+                    end
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                    BiomeR=[8,65,36,33,65,8,8,36;
+                        8,33,65,65,8,8,30,8;
+                        8,8,65,8,65,8,417,8;
+                        292,417,417,417,417,417,417,8;
+                        8,65,417,8,36,8,36,8;
+                        6,6,417,6,6,36,36,6;
+                        36,8,32,33,8,36,8,65;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeR);
+
+                end
+            if (r==4)&&(c==1)
+                x = 1;
+            end
+            end
+    end
+
+
+
+    %Biome 3 / Down (m)
+    if (r==7)&&(c==5)
+
+            while x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health Bar set for Biome 3
+                BiomeD = [65,36,8,33,292,36,33,36;
+                    33,36,8,36,417,33,65,8;
+                    36,33,33,8,417,33,8,65;
+                    65,64,417,417,417,65,33,36;
+                    36,33,8,33,417,65,36,65;
+                    33,8,65,65,417,417,32,33;
+                    8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                drawScene(Overworld,BiomeD);
+
+                if Health == 0 %Health Check 3
+                    break
+                end
+
+            [r,c,p] = getMouseInput(Overworld);
+                if (r==4)&&(c==2) %ENEMY 5
+                    while a5 ~= 1
+                        msg = "Find the exact value of tan(180)";
+                        opts = ["sqrt(2)/2" "0" "1" "-sqrt(2)/2"];
+                        ans5 = menu(msg,opts);
+                            if ans5 == 2 %Correct Answer
+                                a5 = 1;
+                                k5 = 1;
+                            end
+                            if ans5 ~= 2 %Incorrect Answer
+                                Health = Health - 1;
+                                if Health <= 0
+                                    while aGO ~= 1
+                                        msg = "Game Over";
+                                        opts = "Exit";
+                                        ansGO = menu(msg,opts);
+                                            if ansGO == 1
+                                                aGO = 1;
+                                            end
+                                    end
+                                    break
+                                end
+                            end
+                    end
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                    BiomeD = [65,36,8,33,292,36,33,36;
+                        33,36,8,36,417,33,65,8;
+                        36,33,33,8,417,33,8,65;
+                        65,64,417,417,417,65,33,36;
+                        36,33,8,33,417,65,36,65;
+                        33,8,65,65,417,417,32,33;
+                        8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeD);
+
+                end
+
+                if (r==6)&&(c==7) %ENEMY 6
+                    while a6 ~= 1
+                        msg = "A right triangle has sides with lengths 5, 12, and 13. Find the angle (in degrees) opposite of the side of length 12. ";
+                        opts = ["67.4" "24.6" "90" "22.6"];
+                        ans6 = menu(msg,opts);
+                            if ans6 == 1 %Correct Answer
+                                a6 = 1;
+                                k6 = 1;
+                            end
+                            if ans6 ~= 1 %Incorrect Answer
+                                Health = Health - 1;
+                                if Health <= 0
+                                    while aGO ~= 1
+                                        msg = "Game Over";
+                                        opts = "Exit";
+                                        ansGO = menu(msg,opts);
+                                            if ansGO == 1
+                                                aGO = 1;
+                                            end
+                                    end
+                                    break
+                                end
+                            end
+                    end
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                    BiomeD = [65,36,8,33,292,36,33,36;
+                        33,36,8,36,417,33,65,8;
+                        36,33,33,8,417,33,8,65;
+                        65,64,417,417,417,65,33,36;
+                        36,33,8,33,417,65,36,65;
+                        33,8,65,65,417,417,32,33;
+                        8,36,8,33,8,36,8,36;1,x1,x2,x3,x4,x5,x6,1];
+                    drawScene(Overworld,BiomeD);
+
+                end
+            if (r==1)&&(c==5)
+                x = 1;
+            end
+            end
+    end
+
+
+    %Dungeon / Up (m)
+    if (r==1)&&(c==4)
+
+        %Keys not acquired.
+        if (kT~=6)
+            aC = 0;
+            while aC ~= 1
+                msg = "You are not ready...";
+                opts = "Walk away";
+                ansC = menu(msg,opts);
+                    if ansC == 1
+                        aC = 1;
+                        k2 = 1;
+                    end
+            end
+        end 
+
+        %Keys acquired, boss fight unlocked.
+        if (kT==6)
+            
+            while x ~= 1
+
+                [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health Bar set for Dungeon
+                Dungeon = [787,485,485,485,485,485,786,1;
+                    786,485,417,223,417,485,787,1;
+                    482,485,417,417,417,485,481,1;
+                    786,485,417,417,417,485,482,1;
+                    481,485,417,417,417,485,787,1;
+                    787,485,417,417,417,485,482,1;
+                    482,485,417,299,417,485,481,1;
+                    1,x1,x2,x3,x4,x5,x6,1;];
+                drawScene(Overworld,Dungeon);
+
+                if Health == 0 %Health Check 5
+                    break
+                end
+
+            [r,c,p] = getMouseInput(Overworld);
+                if (r==2)&&(c==4) %BOSS FIGHT
+                    while aB ~= 1
+                        msg = "Given that: a = 3 meters, b = 1 meter, and B' = 17 degrees, find the length of side c.";
+                        opts = ["3.16 meters" "3.35 meters" "2.39 meters" "No Solution"];
+                        ansB = menu(msg,opts);
+                        if ansB == 2 %Correct Answer
+                            aB = 1;
+                            k2 = 1;
+                        end
+                        if ansB ~= 2 %Incorrect Answer
+                            Health = Health - 2; %Unlike the 6 base enemies, the boss takes 2 health per incorrect answer.
+                                if Health <= 0
+                                    while aGO ~= 1
+                                        msg = "Game Over";
+                                        opts = "Exit";
+                                        ansGO = menu(msg,opts);
+                                            if ansGO == 1
+                                                aGO = 1;
+                                            end
+                                    end
+                                    break
+                                end
+                        end
+                    end
+
+                    [x1, x2, x3, x4, x5, x6] = HealthBarFunc(Health); %Health bar reset after fight
+                    Dungeon = [787,485,485,485,485,485,786,1;
+                        786,485,417,223,417,485,787,1;
+                        482,485,417,417,417,485,481,1;
+                        786,485,417,417,417,485,482,1;
+                        481,485,417,417,417,485,787,1;
+                        787,485,417,417,417,485,482,1;
+                        482,485,417,299,417,485,481,1;
+                        1,x1,x2,x3,x4,x5,x6,1;];
+                    drawScene(Overworld,Dungeon);
+
+                aGO = 0;
+                while aGO ~= 1
+                    msg = "Congratulations, your trigonometry skills have saved the realm!";
+                    opts = "Exit";
+                    ansGO = menu(msg,opts);
+                        if ansGO == 1
+                            aGO = 1;
+                            w = 0;
+                            x = 1;
+                        end
+                end
+
+                %Program is closed after victory message
+                close all
+                break
+                
+                end
+
+            if (r==2)&&(c==4)
+                x = 1;
+            end
+            end
+        end
+    end
+    end
+end
+end
+
+##### SOURCE END #####
+-->
+</body>
+</html>
